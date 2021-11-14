@@ -46,6 +46,17 @@ class Robot:
         else:
             self.currentCarret = self.carretLeft
         return self.currentCarret
+    
+    def rotateMinus90(self):
+        if self.currentCarret == self.carretDown:
+            self.currentCarret = self.carretLeft
+        elif self.currentCarret == self.carretRight:
+            self.currentCarret = self.carretDown
+        elif self.currentCarret == self.carretLeft:
+            self.currentCarret = self.carretUp
+        else:
+            self.currentCarret = self.carretRight
+        return self.currentCarret
 
     def __str__(self) -> str:
         return f"{self.currentCarret} at ({self.x},{self.y})"
