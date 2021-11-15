@@ -8,7 +8,8 @@ Miguel Flores
 
 import sys
 import re
-from map import Map
+from types import coroutine
+from mapTiles import  MapTile
 from mapObject import MapObject
 from obstacle import Obstacle
 from package import Package
@@ -17,71 +18,244 @@ from destination import Destination
 from collections import deque as queue
 
 path = []
+commands = []
 
-def bfs(map:Map, start:Robot, end:MapObject):
+def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
     frontier:queue = queue()    
     frontier.append((start))
-    visited = [(start.x, start.y)]
+    visited = []
     while len(frontier) > 0:
         current:Robot = frontier.popleft()
         path.append((current,None))
-        if (current.x, current.y) == (end.x,end.y):
+
+        # Validations on Pickup
+        if current.x+1 < mapGraph.lines and (current.x+1, current.y) == (end.x,end.y) and end.currentCarret == "O":
+            if current.currentCarret == ">":
+                pass
+            elif current.currentCarret == "^":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+            elif current.currentCarret == "<":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "v":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            package = mapGraph.packages.pop()
+            mapGraph.mapTile[package.x][package.y] = "-"
+            current.addPackage(package)
+            commands.append("crg    1")
             return current
 
-        if current.x+1 < map.lines and map[current.x+1][current.y] == "-":
-            parent = current
-            map[current.x][current.y] = "-"
+        elif current.x-1 >=0 and (current.x-1, current.y) == (end.x,end.y) and end.currentCarret == "O":
             if (current.x,current.y) in visited:
                 continue
+            elif current.currentCarret == ">":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "^":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "<":
+                pass
+            elif current.currentCarret == "v":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+            package = mapGraph.packages.pop()
+            mapGraph.mapTile[package.x][package.y] = "-"
+            current.addPackage(package)
+            commands.append("crg    1")
+            return current
+
+        elif current.y+1 < mapGraph.lines and (current.x, current.y+1) == (end.x,end.y) and end.currentCarret == "O":
             if current.currentCarret == ">":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "^":
+                pass
+            elif current.currentCarret == "<":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+            elif current.currentCarret == "v":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            package = mapGraph.packages.pop()
+            mapGraph.mapTile[package.x][package.y] = "-"
+            current.addPackage(package)
+            commands.append("crg    1")
+            return current
+
+        elif current.y-1 > 0 and (current.x, current.y-1) == (end.x,end.y) and end.currentCarret == "O":
+            if current.currentCarret == ">":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+            elif current.currentCarret == "^":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+            elif current.currentCarret == "<":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "v":
+                pass
+            package = mapGraph.packages.pop()
+            mapGraph.mapTile[package.x][package.y] = "-"
+            current.addPackage(package)
+            commands.append("crg    1")
+            return current
+    # ------------Validations on movement------------------ #
+        if current.x+1 < mapGraph.lines and mapGraph.mapTile[current.x+1][current.y] == "-":
+
+            parent = current
+            mapGraph.mapTile[current.x][current.y] = "-"
+            if (current.x,current.y) not in visited:
+                visited.append((current.x, current.y))
+            else:
+                continue
+
+            if current.currentCarret == ">":
+                commands.append("avz    1")
                 current.advancePlus1()
             if current.currentCarret == "^":
-                current.rotateMinus90()
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+                commands.append("avz    1")
                 current.advancePlus1()
             if current.currentCarret == "<":
-                current.rotatePlus90()
-                current.rotatePlus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("avz    1")
                 current.advancePlus1()
             if current.currentCarret == "v":
-                current.rotatePlus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("avz    1")
                 current.advancePlus1()
-            
-            current.parent =  parent
-            visited.append((current.x, current.y))
-            path.append(current)
-            frontier.append(current)
-            
 
+        elif current.x-1 >= 0 and mapGraph.mapTile[current.x-1][current.y] == "-":
+            parent = current
+            mapGraph.mapTile[current.x][current.y] = "-"
+            if (current.x,current.y) not in visited:
+                visited.append((current.x, current.y))
+            else:
+                continue
+
+            if current.currentCarret == ">":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("avz    1")
+                current.advanceMinus1()
+            elif current.currentCarret == "^":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("avz    1")
+                current.advanceMinus1()
+            elif current.currentCarret == "<":
+                commands.append("avz    1")
+                current.advanceMinus1()
+            elif current.currentCarret == "v":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+                commands.append("avz    1")
+                current.advanceMinus1()
+
+        elif current.y+1 < mapGraph.lines and mapGraph.mapTile[current.x][current.y+1] == "-":
+            parent = current
+            mapGraph.mapTile[current.x][current.y] = "-"
+            if (current.x,current.y) not in visited:
+                visited.append((current.x, current.y))
+            else:
+                continue
+            if current.currentCarret == ">":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("avz    1")
+                current.advancePlus1()
+            elif current.currentCarret == "^":
+                commands.append("avz    1")
+                current.advancePlus1()
+            elif current.currentCarret == "<":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+                commands.append("avz    1")
+                current.advancePlus1()
+            elif current.currentCarret == "v":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("avz    1")
+                current.advancePlus1()
+
+        elif current.y-1 >= 0 and mapGraph.mapTile[current.x][current.y-1] == "-":
+
+            parent = current
+            mapGraph.mapTile[current.x][current.y] = "-"
+            if (current.x,current.y) not in visited:
+                visited.append((current.x, current.y))
+            else:
+                continue
+            if current.currentCarret == ">":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+                commands.append("avz    1")
+                current.advanceMinus1()
+            elif current.currentCarret == "^":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+                commands.append("avz    1")
+                current.advanceMinus1()
+            elif current.currentCarret == "<":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("avz    1")
+                current.advanceMinus1()
+            elif current.currentCarret == "v":
+                commands.append("avz    1")
+                current.advanceMinus1()
+        current.parent =  parent
+        mapGraph.robot = current
+        mapGraph.mapTile[current.x][current.y] = current
+        frontier.append(current)
         
+            
     return None
 
-
-
-def searchPath():
-    pass
-
 def main():
-    mapfile = ""
-    map:Map = None
+    mapGraphfile = ""
+    mapGraphGraph:MapTile = None
 
     try:
-        mapfile = sys.argv[1]
+        mapGraphfile = sys.argv[1]
     except IndexError:
-        mapfile = None
-        print("Elija un mapa válido")
+        mapGraphfile = None
+        print("Elija un mapGrapha válido")
 
-    if mapfile is None:
+    if mapGraphfile is None:
         sys.exit(1)
 
     lines = None
-    with open(mapfile, 'r+') as  mappingFile:
-        lines = mappingFile.readlines()
+    with open(mapGraphfile, 'r+') as  mapGraphpingFile:
+        lines = mapGraphpingFile.readlines()
 
     count = 0
     for line in lines:
         if count == 0:
             result = re.search(r"(\d*),(\d*)", line)
-            map = Map(int(result[1]),int(result[2]))
+            mapGraphGraph = MapTile(int(result[1]),int(result[2]))
             count+=1
         else:
             for char in line:
@@ -91,22 +265,26 @@ def main():
                     indexes = [index for index, element in enumerate(line) if element == "D"]
                     for inx in indexes:
                         destination = Destination(lns,inx,"D")
-                        map.addDestination(lns,inx,destination)
+                        mapGraphGraph.addDestination(lns,inx,destination)
                 if char == "O":
                     indexes = [index for index, element in enumerate(line) if element == "O"]
                     for inx in indexes:
                         pack = Package(lns,inx,"O")
-                        map.addPackage(pack)
+                        mapGraphGraph.addPackage(pack)
                 if char == "X":
                     indexes = [index for index, element in enumerate(line) if element == "X"]
                     for inx in indexes:
                         obs = Obstacle(lns,inx,"X")
-                        map.addObstacle(obs)
+                        mapGraphGraph.addObstacle(obs)
                 if char in ["<",">","^","v"]:
                     robot = Robot(lns,column,char)
-                    map.addRobot(robot)
+                    mapGraphGraph.addRobot(robot)
             count+=1
-    print(map)
+    print(mapGraphGraph)
+    print(bfs(mapGraphGraph, mapGraphGraph.robot, mapGraphGraph.packages[0]))
+    print(mapGraphGraph.robot, mapGraphGraph.robot.y, mapGraphGraph.robot.y)
+    print("commands",commands)
+    print(mapGraphGraph)
 
 
 if __name__ == '__main__':
