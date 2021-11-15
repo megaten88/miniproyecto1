@@ -27,71 +27,28 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
     while len(frontier) > 0:
         current:Robot = frontier.popleft()
         path.append((current,None))
-
         # Validations on Pickup
         if current.x+1 < mapGraph.lines and (current.x+1, current.y) == (end.x,end.y) and end.currentCarret == "O":
             if current.currentCarret == ">":
-                pass
+                commands.append("rtr    -90")
+                current.rotateMinus90()
             elif current.currentCarret == "^":
+                pass
+            elif current.currentCarret == "<":
                 commands.append("rtr    +90")
                 current.rotatePlus90()
-            elif current.currentCarret == "<":
-                commands.append("rtr    -90")
-                current.rotateMinus90()
-                commands.append("rtr    -90")
-                current.rotateMinus90()
             elif current.currentCarret == "v":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
                 commands.append("rtr    -90")
                 current.rotateMinus90()
             package = mapGraph.packages.pop()
             mapGraph.mapTile[package.x][package.y] = "-"
             current.addPackage(package)
             commands.append("crg    1")
-            return current
+            return current  
 
         elif current.x-1 >=0 and (current.x-1, current.y) == (end.x,end.y) and end.currentCarret == "O":
-            if (current.x,current.y) in visited:
-                continue
-            elif current.currentCarret == ">":
-                commands.append("rtr    -90")
-                current.rotateMinus90()
-                commands.append("rtr    -90")
-                current.rotateMinus90()
-            elif current.currentCarret == "^":
-                commands.append("rtr    -90")
-                current.rotateMinus90()
-            elif current.currentCarret == "<":
-                pass
-            elif current.currentCarret == "v":
-                commands.append("rtr    +90")
-                current.rotatePlus90()
-            package = mapGraph.packages.pop()
-            mapGraph.mapTile[package.x][package.y] = "-"
-            current.addPackage(package)
-            commands.append("crg    1")
-            return current
-
-        elif current.y+1 < mapGraph.lines and (current.x, current.y+1) == (end.x,end.y) and end.currentCarret == "O":
-            if current.currentCarret == ">":
-                commands.append("rtr    -90")
-                current.rotateMinus90()
-            elif current.currentCarret == "^":
-                pass
-            elif current.currentCarret == "<":
-                commands.append("rtr    +90")
-                current.rotatePlus90()
-            elif current.currentCarret == "v":
-                commands.append("rtr    -90")
-                current.rotateMinus90()
-                commands.append("rtr    -90")
-                current.rotateMinus90()
-            package = mapGraph.packages.pop()
-            mapGraph.mapTile[package.x][package.y] = "-"
-            current.addPackage(package)
-            commands.append("crg    1")
-            return current
-
-        elif current.y-1 > 0 and (current.x, current.y-1) == (end.x,end.y) and end.currentCarret == "O":
             if current.currentCarret == ">":
                 commands.append("rtr    +90")
                 current.rotatePlus90()
@@ -105,13 +62,54 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
                 current.rotateMinus90()
             elif current.currentCarret == "v":
                 pass
+            package = mapGraph.packages.pop()
+            mapGraph.mapTile[package.x][package.y] = "-"
+            current.addPackage(package)
+            commands.append("crg    1")
+            return current
+
+        elif current.y+1 < mapGraph.columns and (current.x, current.y+1) == (end.x,end.y) and end.currentCarret == "O":
+            
+            if current.currentCarret == ">":
+                pass
+            elif current.currentCarret == "^":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
+            elif current.currentCarret == "<":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "v":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            package = mapGraph.packages.pop()
+            mapGraph.mapTile[package.x][package.y] = "-"
+            current.addPackage(package)
+            commands.append("crg    1")
+            return current
+
+        elif current.y-1 >= 0 and (current.x, current.y-1) == (end.x,end.y) and end.currentCarret == "O":
+            if current.currentCarret == ">": 
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "^":
+                commands.append("rtr    -90")
+                current.rotateMinus90()
+            elif current.currentCarret == "<":
+                pass
+            elif current.currentCarret == "v":
+                commands.append("rtr    +90")
+                current.rotatePlus90()
             package = mapGraph.packages.pop()
             mapGraph.mapTile[package.x][package.y] = "-"
             current.addPackage(package)
             commands.append("crg    1")
             return current
     # ------------Validations on movement------------------ #
-        if current.x+1 < mapGraph.lines and mapGraph.mapTile[current.x+1][current.y] == "-":
+        if current.x+1 < mapGraph.lines and mapGraph.mapTile[current.x+1][current.y] != "X":
 
             parent = current
             mapGraph.mapTile[current.x][current.y] = "-"
@@ -123,25 +121,25 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
             if current.currentCarret == ">":
                 commands.append("avz    1")
                 current.advancePlus1()
-            if current.currentCarret == "^":
+            elif current.currentCarret == "^":
                 commands.append("rtr    +90")
                 current.rotatePlus90()
                 commands.append("avz    1")
                 current.advancePlus1()
-            if current.currentCarret == "<":
+            elif current.currentCarret == "<":
                 commands.append("rtr    -90")
                 current.rotateMinus90()
                 commands.append("rtr    -90")
                 current.rotateMinus90()
                 commands.append("avz    1")
                 current.advancePlus1()
-            if current.currentCarret == "v":
+            elif current.currentCarret == "v":
                 commands.append("rtr    -90")
                 current.rotateMinus90()
                 commands.append("avz    1")
                 current.advancePlus1()
 
-        elif current.x-1 >= 0 and mapGraph.mapTile[current.x-1][current.y] == "-":
+        elif current.x-1 >= 0 and mapGraph.mapTile[current.x-1][current.y] != "X":
             parent = current
             mapGraph.mapTile[current.x][current.y] = "-"
             if (current.x,current.y) not in visited:
@@ -170,7 +168,7 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
                 commands.append("avz    1")
                 current.advanceMinus1()
 
-        elif current.y+1 < mapGraph.lines and mapGraph.mapTile[current.x][current.y+1] == "-":
+        elif current.y+1 < mapGraph.columns and mapGraph.mapTile[current.x][current.y+1] != "X":
             parent = current
             mapGraph.mapTile[current.x][current.y] = "-"
             if (current.x,current.y) not in visited:
@@ -198,7 +196,7 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
                 commands.append("avz    1")
                 current.advancePlus1()
 
-        elif current.y-1 >= 0 and mapGraph.mapTile[current.x][current.y-1] == "-":
+        elif current.y-1 >= 0 and mapGraph.mapTile[current.x][current.y-1] != "X":
 
             parent = current
             mapGraph.mapTile[current.x][current.y] = "-"
@@ -226,6 +224,7 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
             elif current.currentCarret == "v":
                 commands.append("avz    1")
                 current.advanceMinus1()
+        print("current", current, current.x, current.y)
         current.parent =  parent
         mapGraph.robot = current
         mapGraph.mapTile[current.x][current.y] = current
@@ -282,7 +281,7 @@ def main():
             count+=1
     print(mapGraphGraph)
     print(bfs(mapGraphGraph, mapGraphGraph.robot, mapGraphGraph.packages[0]))
-    print(mapGraphGraph.robot, mapGraphGraph.robot.y, mapGraphGraph.robot.y)
+    print("Robot",mapGraphGraph.robot, mapGraphGraph.robot.y, mapGraphGraph.robot.y)
     print("commands",commands)
     print(mapGraphGraph)
 
