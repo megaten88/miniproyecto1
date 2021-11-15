@@ -1,7 +1,7 @@
 class MapObject():
-    def __init__(self, x:int, y:int, carret:str) -> None:
-        self.x = x
-        self.y = y
+    def __init__(self, line:int, col:int, carret:str) -> None:
+        self.line = line
+        self.col = col
         self.currentCarret = carret
         self.parent:MapObject = None
 

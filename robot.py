@@ -2,27 +2,27 @@ from mapObject import MapObject
 from package import Package
 class Robot(MapObject):
     
-    def __init__(self, x: int, y: int, carret: str) -> None:
+    def __init__(self, line: int, col: int, carret: str) -> None:
         self.carretUp:str="^"
         self.carretRight:str=">"
         self.carretLeft:str="<"
         self.carretDown:str="v"
-        super().__init__(x, y, carret)
+        super().__init__(line, col, carret)
 
     def advancePlus1(self):
-        if self.currentCarret == self.carretDown or self.carretUp:
-            self.y+=1
+        if self.currentCarret == self.carretDown or self.currentCarret==self.carretUp:
+            self.line+=1
         elif self.currentCarret == self.carretRight or self.currentCarret == self.carretLeft:
-            self.x+=1
-        return self.x, self.y
+            self.col+=1
+        return self.line, self.col
     
     def advanceMinus1(self): 
         if self.currentCarret == self.carretDown or self.currentCarret == self.carretUp:
-            self.y-=1
+            self.line-=1
         elif self.currentCarret == self.carretRight or self.currentCarret == self.carretLeft :
-            self.x-=1
+            self.col-=1
 
-        return self.x, self.y
+        return self.line, self.col
 
     def rotateMinus90(self):
         if self.currentCarret == self.carretDown:

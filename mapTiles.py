@@ -5,7 +5,7 @@ from destination import Destination
 
 class MapTile:
     def __init__(self, lines, columns) -> None:
-        self.mapTile = [["-" for x in range(columns)] for y in range (lines)]
+        self.mapTile = [["-" for col in range(columns)] for line in range (lines)]
         self.packages = []
         self.obs = []
         self.destinations = []
@@ -15,26 +15,26 @@ class MapTile:
     
     def addRobot(self, robot:Robot):
         self.robot = robot
-        self.mapTile[robot.x][robot.y] = robot.currentCarret
+        self.mapTile[robot.line][robot.col] = robot.currentCarret
 
     def addPackage(self, package:Package):
         self.packages.append(package)
-        self.mapTile[package.x][package.y] = package.currentCarret
+        self.mapTile[package.line][package.col] = package.currentCarret
 
     def addObstacle(self, obs:Obstacle):
         self.obs.append(obs)
-        self.mapTile[obs.x][obs.y] = obs.currentCarret
+        self.mapTile[obs.line][obs.col] = obs.currentCarret
 
-    def addDestination(self,x:int,y:int, dest:Destination):
+    def addDestination(self,line:int,col:int, dest:Destination):
         self.destinations.append(dest)
-        self.mapTile[x][y] = dest
+        self.mapTile[line][col] = dest
 
     def __str__(self) -> str:
         stringMap:str = ""
-        for x in range(self.lines):
-            for y in range (self.columns):
-                if y <self.columns-1:
-                    stringMap+= str(self.mapTile[x][y])
+        for line in range(self.lines):
+            for col in range (self.columns):
+                if col <self.columns-1:
+                    stringMap+= str(self.mapTile[line][col])
                 else:
-                    stringMap+= str(self.mapTile[x][y])+"\n"
+                    stringMap+= str(self.mapTile[line][col])+"\n"
         return stringMap
