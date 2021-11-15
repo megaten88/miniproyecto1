@@ -1,8 +1,6 @@
 from mapObject import MapObject
 
-from mapObject import MapObject
-
-class Obstacle(MapObject):
+class Destination(MapObject):
     def __init__(self, x: int, y: int, carret: str) -> None:
         super().__init__(x, y, carret)
     

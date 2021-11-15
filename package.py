@@ -1,8 +1,11 @@
-class Package:
-    def __init__(self,x,y) -> None:
-        self.carret = "O"
-        self.x = x
-        self.y = y
+from mapObject import MapObject
+
+
+from mapObject import MapObject
+
+class Package(MapObject):
+    def __init__(self, x: int, y: int, carret: str) -> None:
+        super().__init__(x, y, carret)
     
     def __str__(self) -> str:
-        return "O"
+        return super().__str__()

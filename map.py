@@ -1,12 +1,14 @@
 from robot import Robot
 from package import Package
 from obstacle import Obstacle
+from destination import Destination
 
 class Map:
     def __init__(self, lines, columns) -> None:
         self.map = [["-" for x in range(columns)] for y in range (lines)]
         self.packages = []
         self.obs = []
+        self.destinations = []
         self.lines = lines
         self.columns = columns
         
@@ -23,8 +25,9 @@ class Map:
         self.obs.append(obs)
         self.map[obs.x][obs.y] = obs.carret
 
-    def addDestiny(self,x:int,y:int):
-        self.map[x][y] = "D"
+    def addDestination(self,x:int,y:int, dest:Destination):
+        self.destinations.append(dest)
+        self.map[x][y] = dest
 
     def __str__(self) -> str:
         stringMap:str = ""

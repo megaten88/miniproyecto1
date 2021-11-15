@@ -1,18 +1,12 @@
-class Robot:
-    def __init__(self) -> None:
-        self.carretUp:str="^"
-        self.carretRight:str=">"
-        self.carretLeft:str="<"
-        self.carretDown:str="v"
+from mapObject import MapObject
+class Robot(MapObject):
     
-    def __init__(self, currentCarret:str, positionX:int, positionY:int) -> None:
+    def __init__(self, x: int, y: int, carret: str) -> None:
         self.carretUp:str="^"
         self.carretRight:str=">"
         self.carretLeft:str="<"
         self.carretDown:str="v"
-        self.currentCarret:str = currentCarret
-        self.x:int = positionX
-        self.y:int = positionY
+        super().__init__(x, y, carret)
 
     def advancePlus1(self):
         if self.currentCarret == self.carretDown:
@@ -58,5 +52,3 @@ class Robot:
             self.currentCarret = self.carretRight
         return self.currentCarret
 
-    def __str__(self) -> str:
-        return f"{self.currentCarret} at ({self.x},{self.y})"

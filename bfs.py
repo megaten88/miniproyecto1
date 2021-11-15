@@ -9,11 +9,13 @@ Miguel Flores
 import sys
 import re
 from map import Map
+from mapObject import MapObject
 from obstacle import Obstacle
 from package import Package
-from robot import Robot 
+from robot import Robot
+from destination import Destination
 
-def bfs(map,start, end,): 
+def bfs(map:Map, start:MapObject, end:MapObject):
     pass
 
 def searchPath():
@@ -47,15 +49,22 @@ def main():
                 lns = count-1
                 column = line.index(char)
                 if char == "D":
-                    map.addDestiny(lns,column)
+                    indexes = [index for index, element in enumerate(line) if element == "D"]
+                    for inx in indexes:
+                        destiny = Destination(lns,inx,"D")
+                        map.addDestination(lns,inx)
                 if char == "O":
-                    pack = Package(lns,column)
-                    map.addPackage(pack)
+                    indexes = [index for index, element in enumerate(line) if element == "O"]
+                    for inx in indexes:
+                        pack = Package(lns,inx,"O")
+                        map.addPackage(pack)
                 if char == "X":
-                    obs = Obstacle(lns,column)
-                    map.addObstacle(obs)
+                    indexes = [index for index, element in enumerate(line) if element == "X"]
+                    for inx in indexes:
+                        obs = Obstacle(lns,inx,"X")
+                        map.addObstacle(obs)
                 if char in ["<",">","^","v"]:
-                    robot = Robot(char,lns,column)
+                    robot = Robot(lns,column,char)
                     map.addRobot(robot)
             count+=1
     print(map)
