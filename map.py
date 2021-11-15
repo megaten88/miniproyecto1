@@ -1,20 +1,21 @@
 from robot import Robot
 from package import Package
 from obstacle import Obstacle
-from prettytable import PrettyTable
 
 class Map:
     def __init__(self, lines, columns) -> None:
-        self.map = [["-" for x in range(columns)] for y in range (lines)]
+        self.map = [["-" for x in range(lines)] for y in range (columns)]
         self.packages = []
         self.obs = []
+        self.lines = lines
+        self.columns = columns
         
     
     def addRobot(self, robot:Robot):
         self.robot = robot
         self.map[robot.x][robot.y] = robot.currentCarret
 
-    def addPakage(self, package:Package):
+    def addPackage(self, package:Package):
         self.packages.append(package)
         self.map[package.x][package.y] = package.carret
 
@@ -22,8 +23,15 @@ class Map:
         self.obs.append(obs)
         self.map[obs.x][obs.y] = obs.carret
 
+    def addDestiny(self,x:int,y:int):
+        self.map[x][y] = "D"
+
     def __str__(self) -> str:
-        self.prettyTable:PrettyTable = PrettyTable()
-        for line in self.map:
-            self.prettyTable.add_row(line)
-        print(self.prettyTable)
+        stringMap:str = ""
+        for x in range(self.lines):
+            for y in range (self.columns):
+                if y <self.columns-1:
+                    stringMap+= self.map[x][y]
+                else:
+                    stringMap+= self.map[x][y]+"\n"
+        return stringMap
