@@ -90,8 +90,8 @@ def main():
                 if char == "D":
                     indexes = [index for index, element in enumerate(line) if element == "D"]
                     for inx in indexes:
-                        destiny = Destination(lns,inx,"D")
-                        map.addDestination(lns,inx)
+                        destination = Destination(lns,inx,"D")
+                        map.addDestination(lns,inx,destination)
                 if char == "O":
                     indexes = [index for index, element in enumerate(line) if element == "O"]
                     for inx in indexes:
