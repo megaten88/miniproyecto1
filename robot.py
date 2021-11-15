@@ -1,4 +1,5 @@
 from mapObject import MapObject
+from package import Package
 class Robot(MapObject):
     
     def __init__(self, x: int, y: int, carret: str) -> None:
@@ -51,4 +52,12 @@ class Robot(MapObject):
         else:
             self.currentCarret = self.carretRight
         return self.currentCarret
+
+    def addPackage(self,pack:Package):
+        self.package = pack
+
+    def deliverPackage(self) -> Package:
+        deliver = self.package 
+        self.package = None
+        return deliver
 

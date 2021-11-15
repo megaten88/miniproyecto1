@@ -3,6 +3,7 @@ class MapObject():
         self.x = x
         self.y = y
         self.currentCarret = carret
+        self.parent:MapObject = None
 
     def __str__(self) -> str:
         return self.currentCarret
