@@ -10,28 +10,21 @@ class Robot(MapObject):
         super().__init__(x, y, carret)
 
     def advancePlus1(self):
-        if self.currentCarret == self.carretDown:
+        if self.currentCarret == self.carretDown or self.carretUp:
             self.y+=1
-        elif self.currentCarret == self.carretRight:
+        elif self.currentCarret == self.carretRight or self.currentCarret == self.carretLeft:
             self.x+=1
-        elif self.currentCarret == self.carretLeft:
-            self.x-=1
-        else:
-            self.y-=1
         return self.x, self.y
     
-    def advanceMinus1(self):
-        if self.currentCarret == self.carretDown:
+    def advanceMinus1(self): 
+        if self.currentCarret == self.carretDown or self.currentCarret == self.carretUp:
             self.y-=1
-        elif self.currentCarret == self.carretRight:
+        elif self.currentCarret == self.carretRight or self.currentCarret == self.carretLeft :
             self.x-=1
-        elif self.currentCarret == self.carretLeft:
-            self.x+=1
-        else:
-            self.y+=1
+
         return self.x, self.y
 
-    def rotatePlus90(self):
+    def rotateMinus90(self):
         if self.currentCarret == self.carretDown:
             self.currentCarret = self.carretRight
         elif self.currentCarret == self.carretRight:
@@ -42,7 +35,7 @@ class Robot(MapObject):
             self.currentCarret = self.carretLeft
         return self.currentCarret
     
-    def rotateMinus90(self):
+    def rotatePlus90(self):
         if self.currentCarret == self.carretDown:
             self.currentCarret = self.carretLeft
         elif self.currentCarret == self.carretRight:
@@ -60,4 +53,7 @@ class Robot(MapObject):
         deliver = self.package 
         self.package = None
         return deliver
+
+    def __str__(self) -> str:
+        return super().__str__()
 
