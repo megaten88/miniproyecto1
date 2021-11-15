@@ -10,6 +10,8 @@ import sys
 def bfs(): 
     pass
 
+def searchPath():
+    pass
 
 def main():
     mapfile = ""
