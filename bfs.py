@@ -25,7 +25,6 @@ mapGraphGraph:MapTile = None
 count = 0
 def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
     frontier:queue = queue()  
-    start.parent = None  
     frontier.append((start))
     while len(frontier) > 0:
         current:Robot = frontier.popleft()
@@ -156,87 +155,87 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
                 continue
             if location == (current.line+1, current.col):# v
                 if reset_current.currentCarret == "v":
-                    commands.append((current, current.parent,"avz    1","v"))
+                    commands.append((reset_current, current,"avz    1","v"))
                     reset_current.advancePlus1()
                 elif reset_current.currentCarret == ">":
-                    commands.append((current, current.parent,"rtr    -90","v"))
+                    commands.append((reset_current, current,"rtr    -90","v"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"avz    1","v"))
+                    commands.append((reset_current, current,"avz    1","v"))
                     reset_current.advancePlus1()
                 elif reset_current.currentCarret == "^":
-                    commands.append((current, current.parent,"rtr    +90","v"))
+                    commands.append((reset_current, current,"rtr    +90","v"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"rtr    +90","v"))
+                    commands.append((reset_current, current,"rtr    +90","v"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"avz    1"))
+                    commands.append((reset_current, current,"avz    1"))
                     reset_current.advancePlus1()
                 elif reset_current.currentCarret == "<":
-                    commands.append((current, current.parent,"rtr    +90","v"))
+                    commands.append((reset_current, current,"rtr    +90","v"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"avz    1","v"))
+                    commands.append((reset_current, current,"avz    1","v"))
                     reset_current.advancePlus1()
             elif location == (current.line, current.col+1): # >
                 if reset_current.currentCarret == "v":
-                    commands.append((current, current.parent,"rtr    +90",">"))
+                    commands.append((reset_current, current,"rtr    +90",">"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"avz    1",">"))
+                    commands.append((reset_current, current,"avz    1",">"))
                     reset_current.advancePlus1()
                 elif reset_current.currentCarret == ">":
-                    commands.append((current, current.parent,"avz    1",">"))
+                    commands.append((reset_current, current,"avz    1",">"))
                     reset_current.advancePlus1()
                 elif reset_current.currentCarret == "^":
-                    commands.append((current, current.parent,"rtr    -90",">"))
+                    commands.append((reset_current, current,"rtr    -90",">"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"avz    1", ">"))
+                    commands.append((reset_current, current,"avz    1", ">"))
                     reset_current.advancePlus1()
                 elif reset_current.currentCarret == "<":
-                    commands.append((current, current.parent,"rtr    -90", ">"))
+                    commands.append((reset_current, current,"rtr    -90", ">"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"rtr    -90",">"))
+                    commands.append((reset_current, current,"rtr    -90",">"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"avz    1",">"))
+                    commands.append((reset_current, current,"avz    1",">"))
                     reset_current.advancePlus1()
             elif location == (current.line-1, current.col):
                 if reset_current.currentCarret == "v":
-                    commands.append((current, current.parent,"rtr    -90","^"))
+                    commands.append((reset_current, current,"rtr    -90","^"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"rtr    -90","^"))
+                    commands.append((reset_current, current,"rtr    -90","^"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"avz    1","^"))
+                    commands.append((reset_current, current,"avz    1","^"))
                     reset_current.advanceMinus1()
                 elif reset_current.currentCarret == "<":
-                    commands.append((current, current.parent,"rtr    -90","^"))
+                    commands.append((reset_current, current,"rtr    -90","^"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"avz    1","^"))
+                    commands.append((reset_current, current,"avz    1","^"))
                     reset_current.advanceMinus1()
                 elif reset_current.currentCarret == "^":
-                    commands.append((current, current.parent,"avz    1","^"))
+                    commands.append((reset_current, current,"avz    1","^"))
                     reset_current.advanceMinus1()
                 elif reset_current.currentCarret == ">":
-                    commands.append((current, current.parent,"rtr    +90","^"))
+                    commands.append((reset_current, current,"rtr   +90","^"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"avz    1","^"))
+                    commands.append((reset_current, current,"avz    1","^"))
                     reset_current.advanceMinus1()
             elif location == (current.line, current.col-1):
                 if reset_current.currentCarret == "v":
-                    commands.append((current, current.parent,"rtr    -90","<"))
+                    commands.append((reset_current, current,"rtr    -90","<"))
                     reset_current.rotateMinus90()
-                    commands.append((current, current.parent,"avz    1","<"))
+                    commands.append((reset_current, current,"avz    1","<"))
                     reset_current.advanceMinus1()
                 elif reset_current.currentCarret == ">":
-                    commands.append((current, current.parent,"rtr    +90","<"))
+                    commands.append((reset_current, current,"rtr    +90","<"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"rtr    +90","<"))
+                    commands.append((reset_current, current,"rtr    +90","<"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"avz    1","<"))
+                    commands.append((reset_current, current,"avz    1","<"))
                     reset_current.advanceMinus1()
                 elif reset_current.currentCarret == "^":
-                    commands.append((current, current.parent,"rtr    +90","<"))
+                    commands.append((reset_current, current,"rtr    +90","<"))
                     reset_current.rotatePlus90()
-                    commands.append((current, current.parent,"avz    1","<"))
+                    commands.append((reset_current, current,"avz    1","<"))
                     reset_current.advanceMinus1()
                 elif reset_current.currentCarret == "<":
-                    commands.append((current, current.parent,"avz    1","<"))
+                    commands.append((reset_current, current,"avz    1","<"))
                     reset_current.advanceMinus1()
             reset_current.parent = current
             print("current", reset_current, reset_current.line, reset_current.col)
@@ -288,9 +287,9 @@ def returnPath(robot:Robot):
         robot = robot.parent
     path.reverse()
     all_sequence = []
-    for robot in path:
+    for r in path:
         for command in commands:
-            if command[0] == robot and command[1] == robot.parent and (command[3] == robot.currentCarret or command[3] == "pk"):
+            if (command[0] == r and command[1] == r.parent and (command[3] == r.currentCarret or command[3] == "pk")):
                 all_sequence.append(command[2])
     return all_sequence
 
@@ -340,6 +339,7 @@ def create_map():
                 if char in ["<",">","^","v"]:
                     print(lns, column, char)
                     robot = Robot(lns,column,char)
+                    robot.parent = None
                     mapGraphGraph.addRobot(robot)
             count+=1
     return mapGraphGraph
