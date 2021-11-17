@@ -314,7 +314,7 @@ def create_map():
 
     if mapGraphfile is None:
         sys.exit(1)
-
+    sys.setrecursionlimit(10000)
     lines = None
     with open(mapGraphfile, 'r+') as  mapGraphpingFile:
         lines = mapGraphpingFile.readlines()
