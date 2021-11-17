@@ -24,7 +24,7 @@ class Robot(MapObject):
 
         return self.line, self.col
 
-    def rotateMinus90(self):
+    def rotatePlus90(self):
         if self.currentCarret == self.carretDown:
             self.currentCarret = self.carretRight
         elif self.currentCarret == self.carretRight:
@@ -35,7 +35,7 @@ class Robot(MapObject):
             self.currentCarret = self.carretLeft
         return self.currentCarret
     
-    def rotatePlus90(self):
+    def rotateMinus90(self):
         if self.currentCarret == self.carretDown:
             self.currentCarret = self.carretLeft
         elif self.currentCarret == self.carretRight:
