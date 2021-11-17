@@ -262,7 +262,7 @@ def main():
         robotCharge = (bfs(mapGraphGraph, mapGraphGraph.robot, mapGraphGraph.packages[i]))
         print(mapGraphGraph)
         global visited
-        visited = []
+        visited = [(robotCharge.line,robotCharge.col)]
         robotDeliver = (bfs(mapGraphGraph, mapGraphGraph.robot, mapGraphGraph.destinations[i]))
         print(mapGraphGraph)
         visited = []
@@ -277,13 +277,13 @@ def main():
 
 def searchPaths(mapGraph:MapTile,robot:Robot):
     locations = []
-    if robot.line+1 < mapGraph.lines and mapGraph.mapTile[robot.line+1][robot.col] != "X":
+    if robot.line+1 < mapGraph.lines and mapGraph.mapTile[robot.line+1][robot.col] != "X" and mapGraph.mapTile[robot.line+1][robot.col] != "O":
         locations.append((robot.line+1,robot.col))
-    if robot.col+1 < mapGraph.columns and mapGraph.mapTile[robot.line][robot.col+1] != "X":
+    if robot.col+1 < mapGraph.columns and mapGraph.mapTile[robot.line][robot.col+1] != "X" and mapGraph.mapTile[robot.line][robot.col+1] != "O":
         locations.append((robot.line,robot.col+1))
-    if robot.line-1 >= 0 and mapGraph.mapTile[robot.line-1][robot.col] != "X":
+    if robot.line-1 >= 0 and mapGraph.mapTile[robot.line-1][robot.col] != "X" and mapGraph.mapTile[robot.line-1][robot.col] != "O":
         locations.append((robot.line-1,robot.col))
-    if robot.col-1 >= 0 and mapGraph.mapTile[robot.line][robot.col-1] != "X":
+    if robot.col-1 >= 0 and mapGraph.mapTile[robot.line][robot.col-1] != "X" and mapGraph.mapTile[robot.line][robot.col-1] != "O":
         locations.append((robot.line,robot.col-1))
     return locations
 
