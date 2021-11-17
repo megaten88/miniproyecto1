@@ -18,16 +18,19 @@ class MapTile:
         self.mapTile[robot.line][robot.col] = robot.currentCarret
 
     def addPackage(self, package:Package):
-        self.packages.append(package)
-        self.mapTile[package.line][package.col] = package.currentCarret
+        if package not in self.packages:
+            self.packages.append(package)
+            self.mapTile[package.line][package.col] = package.currentCarret
 
     def addObstacle(self, obs:Obstacle):
-        self.obs.append(obs)
-        self.mapTile[obs.line][obs.col] = obs.currentCarret
+        if obs not in self.obs:
+            self.obs.append(obs)
+            self.mapTile[obs.line][obs.col] = obs.currentCarret
 
     def addDestination(self,line:int,col:int, dest:Destination):
-        self.destinations.append(dest)
-        self.mapTile[line][col] = dest
+        if dest not in self.destinations:
+            self.destinations.append(dest)
+            self.mapTile[line][col] = dest
 
     def __str__(self) -> str:
         stringMap:str = ""

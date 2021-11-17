@@ -167,7 +167,7 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
                     reset_current.rotatePlus90()
                     commands.append((reset_current, current,"rtr    +90","v"))
                     reset_current.rotatePlus90()
-                    commands.append((reset_current, current,"avz    1"))
+                    commands.append((reset_current, current,"avz    1", "v"))
                     reset_current.advancePlus1()
                 elif reset_current.currentCarret == "<":
                     commands.append((reset_current, current,"rtr    +90","v"))
@@ -240,7 +240,7 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
             reset_current.parent = current
             print("current", reset_current, reset_current.line, reset_current.col)
             reset_mapgraph.robot = reset_current
-            if current!= start and str(reset_mapgraph.mapTile[start.line][start.col]) == ">":
+            if current!= start:
                 reset_mapgraph.mapTile[start.line][start.col] = "-"
             reset_mapgraph.mapTile[current.line][current.col] = "-"
             reset_mapgraph.mapTile[reset_current.line][reset_current.col] = reset_current
@@ -254,18 +254,26 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
 
 def main(): 
     
-    mapGraphGraph = create_map()
+    mapGraphGraph, file = create_map()
     packages = len(mapGraphGraph.packages)
-
+    solution = ""
+    robotDeliver = None
     for i in range(packages):
         robotCharge = (bfs(mapGraphGraph, mapGraphGraph.robot, mapGraphGraph.packages[i]))
-        print(returnPath(robotCharge))
-        print("Finished Here")
         print(mapGraphGraph)
+        global visited
+        visited = []
         robotDeliver = (bfs(mapGraphGraph, mapGraphGraph.robot, mapGraphGraph.destinations[i]))
         print(mapGraphGraph)
-        print(returnPath(robotDeliver))
-        print("Robot",mapGraphGraph.robot, mapGraphGraph.robot.line, mapGraphGraph.robot.col)
+        visited = []
+    commands_result = returnPath(robotDeliver)
+    solution+="\n".join(commands_result)+"\n"
+    
+
+    result = re.search(r"_(\d+)", file)
+    resultFile = f"resullt_{result[1]}.txt"
+    with open(resultFile,"+w") as deliverResult:
+        deliverResult.writelines(solution)
 
 def searchPaths(mapGraph:MapTile,robot:Robot):
     locations = []
@@ -282,7 +290,7 @@ def searchPaths(mapGraph:MapTile,robot:Robot):
 def returnPath(robot:Robot):
     path = [robot]
 
-    while robot.parent is not None:
+    while robot is not None and robot.parent is not None:
         path.append(robot.parent)
         robot = robot.parent
     path.reverse()
@@ -318,7 +326,10 @@ def create_map():
             mapGraphGraph = MapTile(int(result[1]),int(result[2]))
             count+=1
         else:
+            char_found = []
             for char in line:
+                if char in char_found:
+                    continue
                 lns = count-1
                 column = line.index(char)
                 if char == "D":
@@ -326,23 +337,27 @@ def create_map():
                     for inx in indexes:
                         destination = Destination(lns,inx,"D")
                         mapGraphGraph.addDestination(lns,inx,destination)
+                    char_found.append("D")
                 if char == "O":
                     indexes = [index for index, element in enumerate(line) if element == "O"]
                     for inx in indexes:
                         pack = Package(lns,inx,"O")
                         mapGraphGraph.addPackage(pack)
+                    char_found.append("O")
                 if char == "X":
                     indexes = [index for index, element in enumerate(line) if element == "X"]
                     for inx in indexes:
                         obs = Obstacle(lns,inx,"X")
                         mapGraphGraph.addObstacle(obs)
+                    char_found.append("X")
                 if char in ["<",">","^","v"]:
                     print(lns, column, char)
                     robot = Robot(lns,column,char)
                     robot.parent = None
                     mapGraphGraph.addRobot(robot)
+                    char_found.append(char)
             count+=1
-    return mapGraphGraph
+    return (mapGraphGraph, mapGraphfile)
 
 if __name__ == '__main__':
     main()
