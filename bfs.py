@@ -8,6 +8,7 @@ Miguel Flores
 
 import sys
 import re
+from timeit import default_timer
 from types import coroutine
 from mapTiles import  MapTile
 from mapObject import MapObject
@@ -253,7 +254,7 @@ def bfs(mapGraph:MapTile, start:Robot, end:MapObject):
     return None
 
 def main(): 
-    
+    inicio= default_timer()
     mapGraphGraph, file = create_map()
     packages = len(mapGraphGraph.packages)
     solution = ""
@@ -274,6 +275,8 @@ def main():
     resultFile = f"resullt_{result[1]}.txt"
     with open(resultFile,"+w") as deliverResult:
         deliverResult.writelines(solution)
+    fin = default_timer()
+    print(fin-inicio)    
 
 def searchPaths(mapGraph:MapTile,robot:Robot):
     locations = []

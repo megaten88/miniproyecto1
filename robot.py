@@ -7,20 +7,25 @@ class Robot(MapObject):
         self.carretRight:str=">"
         self.carretLeft:str="<"
         self.carretDown:str="v"
+        self.cost=0
         super().__init__(line, col, carret)
 
     def advancePlus1(self):
         if self.currentCarret == self.carretDown or self.currentCarret==self.carretUp:
             self.line+=1
+            self.cost+=1
         elif self.currentCarret == self.carretRight or self.currentCarret == self.carretLeft:
             self.col+=1
+            self.cost+=1
         return self.line, self.col
     
     def advanceMinus1(self): 
         if self.currentCarret == self.carretDown or self.currentCarret == self.carretUp:
             self.line-=1
+            self.cost+=1
         elif self.currentCarret == self.carretRight or self.currentCarret == self.carretLeft :
             self.col-=1
+            self.cost+=1
 
         return self.line, self.col
 
